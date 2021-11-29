@@ -1,8 +1,9 @@
 let inputPopulation = [
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 0, 0]
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 1, 0, 1]
 ];
 
 function neighborCount(i, j) {
@@ -35,18 +36,20 @@ function neighborCount(i, j) {
             sum += (inputPopulation[i+1][j+1])
         }
     }
-    // console.log(sum)
     return sum;
 }
 
-let heatmap = [];
+let heatmap = []
 
-for (let k = 0; k < inputPopulation.length; k++){
-    heatmap[k] = [];
-    for (let l= 0; l < inputPopulation[k].length; l++){
-        heatmap[k][l] = neighborCount(k,l)
-        }  
-};
+function makeHeatmap (){
+    for (let k = 0; k < inputPopulation.length; k++){
+        heatmap[k] = [];
+        for (let l= 0; l < inputPopulation[k].length; l++){
+            heatmap[k][l] = neighborCount(k,l)
+            }  
+    };
+    return heatmap;
+}
 
 //amountOfNeighbors is a value on the heatmap (heatmap[k][l]=amountOfNeighbors), so it equals the number of neighbors
 //inhabitant is a value on the inputPopulation, if inhabitant = 1 the cell is alive, 0 means it is dead
@@ -66,19 +69,26 @@ function lifeAndDeath (inhabitant, amountOfNeighbors){
     }
     return inhabitant;
 }
-// This is a test: 
-// lifeAndDeath(0, 2) I excpect it to yield 0
 
-// This was another test:
-// let newInhabitant = lifeAndDeath(inputPopulation[0][2], heatmap[0][2])
-
-newPopulation = [];
-
-for (let k = 0; k < inputPopulation.length; k++){
-    newPopulation[k] = [];
-    for (let l= 0; l < inputPopulation[k].length; l++){
-        newPopulation[k][l] = lifeAndDeath(inputPopulation[k][l], heatmap[k][l])
+function repopulate (){
+    newPopulation = [];
+    for (let k = 0; k < inputPopulation.length; k++){
+        newPopulation[k] = [];
+        for (let l= 0; l < inputPopulation[k].length; l++){
+            newPopulation[k][l] = lifeAndDeath(inputPopulation[k][l], heatmap[k][l])
         }  
-};
+    }
+    return(newPopulation);
+}
 
-console.log(newPopulation)
+
+function simulate(Iterations){
+    for (let i = 1; i <= Iterations; i++){
+        heatmap = makeHeatmap();
+
+        inputPopulation = repopulate()
+        console.log(inputPopulation)
+    }
+}
+
+simulate(5);
